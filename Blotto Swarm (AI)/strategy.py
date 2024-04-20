@@ -11,12 +11,24 @@ WARNING: Do not print anything to stdout. It will break the grading script!
 """
 
 def strategy(ally: list, enemy: list, offset: int) -> int:
-    # Implement me!
-    return 0
-
+    # If we are at a castle
+    if offset == 0:
+        if ally[3] > 10:
+            return random.choice([-1, 1])
+    elif offset == -1:
+        num_enemies = enemy[2] + enemy [3] + enemy [1]
+        if num_enemies > 15:
+            return -offset
+        return offset
+    elif offset == 1:
+        num_enemies = enemy[3] + enemy[4] + enemy[5]
+        if num_enemies > 15:
+            return -offset
+        return offset
+ 
 def random_strategy(ally: list, enemy: list, offset: int) -> int:
-    # A random strategy to use in your game
-    return random.randint(-1, 1)
+    # A simple strategy
+    return random.choice([-1, 0, 1])
 
 
 def get_strategies():
