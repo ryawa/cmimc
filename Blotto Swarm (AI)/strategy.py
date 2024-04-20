@@ -11,33 +11,27 @@ NOTE: Each soldier's memory in the final runner will be separate from the others
 WARNING: Do not print anything to stdout. It will break the grading script!
 """
 
-def ryan(ally: list, enemy: list, offset: int) -> int:
-    if offset == 0 and enemy[3] < 7:
-        return 0
-    return 1
-
-def roger(ally: list, enemy: list, offset: int) -> int:
-    # If we are at a castle
-    castle_neighbors = [2, 3, 4]
-    castle_neighbors = [x + offset for x in castle_neighbors]
-    num_allies = sum([ally[i] for i in castle_neighbors])
-    num_enemies = sum([enemy[i] for i in castle_neighbors])
-    if offset == 0:
-        if ally[3] > 7:
-            return random.choice([-1, 1])
-    elif offset == -1:
-        # print(castle_neighbors, file=sys.stderr)
-        if num_enemies > 7:
-            return -offset
+def base(ally: list, enemy: list, offset: int) -> int:
+    if enemy[3 + offset] < 8:
         return offset
-    elif offset == 1:
-        if num_enemies > 7:
-            return -offset
-        return offset
+    return random.randint(-1, 1)
+    # clumping
+    # enemies swarming
  
-def wenhao(ally: list, enemy: list, offset: int) -> int:
-    # A simple strategy
-    return offset
+def new(ally: list, enemy: list, offset: int) -> int:
+    castle_neighbors = [i + offset for i in range(2, 5)]
+    castle_allies = sum([ally[i] for i in castle_neighbors])
+    castle_enemies = sum([enemy[i] for i in castle_neighbors])
+    
+    if enemy[3 + offset] < 8:
+        return offset
+    if castle_allies > 8:
+        return -offset
+    return random.randint(-1, 1)
+
+def random_strategy(ally: list, enemy: list, offset: int) -> int:
+    return random.choice([-1, 0, 1])
+
 
 def get_strategies():
     """
@@ -48,6 +42,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [wenhao, roger, ryan]
+    strategies = [base, new]
 
     return strategies
