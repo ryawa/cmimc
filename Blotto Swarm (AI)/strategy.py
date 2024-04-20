@@ -41,7 +41,7 @@ def new_run(ally, enemy, offset):
     if castle_enemies > 15:
         return -offset
     return random.randint(-1, 1)
-
+#test
 def random_strategy(ally: list, enemy: list, offset: int) -> int:
     return random.choice([-1, 0, 1])
 
