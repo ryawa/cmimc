@@ -1,0 +1,3 @@
+0 0 _ _ _ R % keep on moving right
+0 1 _ 2 _ _ % light if there is one lighted
+0 2 _ _ _ _ % halt
