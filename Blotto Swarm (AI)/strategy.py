@@ -25,6 +25,7 @@ def strategy(ally: list, enemy: list, offset: int) -> int:
         if num_enemies > 15:
             return -offset
         return offset
+    # ttest
  
 def random_strategy(ally: list, enemy: list, offset: int) -> int:
     # A simple strategy
