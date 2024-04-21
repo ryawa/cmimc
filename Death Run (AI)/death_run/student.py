@@ -48,3 +48,22 @@ class RandomStudent(BaseStudent):
                 )
             ]
         )
+
+class dijkstra(BaseStudent):
+    def __init__(self, edge_list, begin, ends):
+        self.edge_list = edge_list
+        self.begin = begin
+        self.ends = ends
+
+        self.graph = nx.DiGraph()
+        self.graph.add_weighted_edges_from(edge_list)
+
+    def strategy(self,edge_updates, vertex_counts, current_vertex):
+        shortest_paths = nx.single_source_dijkstra_path_length(self.graph, source=self.begin, weight='weight')
+        exit_path = {vertex: shortest_paths[vertex] for vertex in self.ends if vertex in shortest_paths}
+        if exit_path:
+            return min(exit_path, key=exit_path.get)
+        else:
+            adjacent_verticies = list(self.graph.neighbors(current_vertex))
+            return adjacent_verticies
+    
