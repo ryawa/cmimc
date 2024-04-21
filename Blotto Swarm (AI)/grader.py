@@ -70,12 +70,13 @@ class BlottoSwarmGrader:
     """
     NUM_DAYS = 100
 
-    def __init__(self, num_games: int = 20, debug = False):
+    def __init__(self, num_games: int = 100, debug = False):
         self.num_games = num_games # number of games to play per pair of strategies
         self.debug = debug
         self.strategies = get_strategies()
 
     def grade(self, strategy1, strategy2):
+        print(self.num_games)
         scores = [0, 0]
         for game_num in range(1, self.num_games+1):
             if self.debug and game_num % 100 == 0:
@@ -145,7 +146,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Blotto Swarm local runner CLI")
 
-    parser.add_argument("--games", "-g", type=int, default=20)
+    parser.add_argument("--games", "-g", type=int, default=100)
     parser.add_argument("--debug", "-d", action="store_true")
 
     args = parser.parse_args()
