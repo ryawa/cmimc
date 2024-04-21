@@ -56,13 +56,13 @@ class dijkstra(BaseStudent):
         self.ends = ends # List of verticies of valid exits
 
         self.graph = nx.DiGraph()
-        self.graph.add_weighted_edges_from(edge_list)
+        self.graph.add_weighted_edges_from(edge_list) 
 
     def strategy(self,edge_updates, vertex_counts, current_vertex):
         shortest_paths = nx.single_source_dijkstra_path_length(self.graph, source=self.begin, weight='weight')
-        exit_path = {vertex: shortest_paths[vertex] for vertex in self.ends if vertex in shortest_paths}
-        if exit_path:
-            return min(exit_path, key=exit_path.get)
+        exit_paths = {vertex: shortest_paths[vertex] for vertex in self.ends if vertex in shortest_paths}
+        if exit_paths:
+            return min(exit_paths, key=exit_paths.get)
         else:
             adjacent_verticies = list(self.graph.neighbors(current_vertex))
             return adjacent_verticies
