@@ -51,9 +51,9 @@ class RandomStudent(BaseStudent):
 
 class dijkstra(BaseStudent):
     def __init__(self, edge_list, begin, ends):
-        self.edge_list = edge_list
-        self.begin = begin
-        self.ends = ends
+        self.edge_list = edge_list # list of tuples (u,v,w) Edge exists from vertex u to vertex v with weighting w
+        self.begin = begin # vertex where students begin
+        self.ends = ends # List of verticies of valid exits
 
         self.graph = nx.DiGraph()
         self.graph.add_weighted_edges_from(edge_list)
