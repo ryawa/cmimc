@@ -12,7 +12,6 @@ WARNING: Do not print anything to stdout. It will break the grading script!
 """
 
 def base(ally: list, enemy: list, offset: int) -> int:
-    random.seed(10)
     if enemy[3 + offset] < 8:
         return offset
     return random.randint(-1, 1)
@@ -96,6 +95,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [new, new_weighting4]
+    strategies = [base, new]
 
     return strategies
