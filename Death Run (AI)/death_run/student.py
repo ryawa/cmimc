@@ -67,3 +67,4 @@ class dijkstra(BaseStudent):
             adjacent_verticies = list(self.graph.neighbors(current_vertex))
             return adjacent_verticies
     
+    
