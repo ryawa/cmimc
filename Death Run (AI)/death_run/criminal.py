@@ -53,3 +53,16 @@ class RandomCriminal(BaseCriminal):
             ),
             random.randint(0, budget),
         )
+    
+# implements dijkstra to spend money on shortest paths.
+# probably should add stuff like don't spend money if not many students on a vertex
+class Criminal_Dijkstra(BaseCriminal):
+    def __init__(self, edge_list: list[tuple[int, int, int]], begin: int, ends: list[int]) -> None:
+        self.edge_list = edge_list
+        self.begin = begin
+        self.ends = ends
+
+        self.graph = nx.DiGraph()
+        self.graph.add_weighted_edges_from(edge_list)
+    def strategy(self, edge_updates, vertex_count, budget):
+        pass        
