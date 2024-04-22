@@ -66,5 +66,21 @@ class dijkstra(BaseStudent):
         else:
             adjacent_verticies = list(self.graph.neighbors(current_vertex))
             return adjacent_verticies
+class dijkstra_with_random(BaseStudent):
+    def __init__(self, edge_list, begin, ends):
+        self.edge_list = edge_list # list of tuples (u,v,w) Edge exists from vertex u to vertex v with weighting w
+        self.begin = begin # vertex where students begin
+        self.ends = ends # List of verticies of valid exits
+
+        self.graph = nx.DiGraph()
+        self.graph.add_weighted_edges_from(edge_list) 
+    def strategy(self, edge_updates, vertex_counts, current_vertex):
+        shortest_paths = nx.single_source_dijkstra_path_length(self.graph, source=self.begin, weight='weight')
+        exit_paths = {vertex: shortest_paths[vertex] for vertex in self.ends if vertex in shortest_paths}
+        if random.random() < 0.8:
+            return min(exit_paths, key=exit_paths.get)
+        else:
+            return random.choice([x for (_, x, _) in filter(lambda z: z[0] == current_vertex, self.edge_list)])
+    
     
     
