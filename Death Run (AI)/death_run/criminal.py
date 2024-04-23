@@ -64,5 +64,5 @@ class Criminal_Dijkstra(BaseCriminal):
 
         self.graph = nx.DiGraph()
         self.graph.add_weighted_edges_from(edge_list)
-    def strategy(self, edge_updates, vertex_count, budget):
-        pass        
+    def strategy():
+        pass
