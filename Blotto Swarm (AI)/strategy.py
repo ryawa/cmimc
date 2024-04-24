@@ -49,8 +49,7 @@ def greedy_weighted(ally, enemy, offset):
     if offset == -1:
         if random.random() < weighting:
             return -1
-        else:
-            return 1
+        return 1
     if random.random() < weighting:
         return 1
     return -1
@@ -70,8 +69,7 @@ def diversity(ally: list, enemy: list, offset: int) -> int:
     if offset != 0:
         if enemy[offset + 3] > ally[offset + 3]:
             return offset
-        else:
-            return -offset
+        return -offset
     return offset
 
 
@@ -106,6 +104,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [greedy, greedy_efficient, greedy_weighted]
+    strategies = [greedy_efficient, greedy_weighted]
 
     return strategies
