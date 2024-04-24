@@ -1,0 +1,35 @@
+﻿Implement your criminal and student strategies in `criminal.py` and `student.py` respectively. Ensure that your criminal strategy inherits `BaseCriminal` and that your student strategy inherits `BaseStudent`.
+
+
+Modify game parameters (e.g. which students, which criminals to play) in `game.py` at the bottom of the file (under `if __name__ == "__main__":`).
+
+
+
+
+For Death Run, the strategy you wish to submit must reside in the BaseCriminal and BaseStudent classes; these classes are what you submit. For example, with the starter random strategies, you would submit:
+
+
+class BaseCriminal():
+   def __init__(self, edge_list, begin, ends):
+       pass
+
+
+   def strategy(self, edge_updates, vertex_count, budget):
+       pass
+
+
+
+
+for criminal and
+
+
+class BaseStudent():
+   def __init__(self, edge_list, begin, ends):
+       pass
+
+
+   def strategy(self, edge_updates, vertex_count, current_vertex):
+       pass
+
+
+for student.

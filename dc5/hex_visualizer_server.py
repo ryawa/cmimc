@@ -20,7 +20,7 @@ HEX_SIZE = 40  # Size of each hexagon
 WIDTH, HEIGHT = 800, 600  # Window dimensions
 BACKGROUND_COLOR = (0, 255, 255)  # Aqua
 FPS = 30
-players = ["white", "black", "red"]  # List of players
+colors = [(255, 255, 255),(0, 0, 0),(255, 0, 0)]  # List of players
 
 res = {}
 step = 0
@@ -47,20 +47,19 @@ def prompt_file():
     global step
     global board
     global players
+    global players2id
     """Create a Tk file dialog and cleanup when finished"""
     top = tkinter.Tk()
     top.withdraw()  # hide window
     file_name = tkinter.filedialog.askopenfilename(parent=top)
     top.destroy()
-
     with open(file_name, "r") as reader:
         res = json.load(reader)
     step = 0
     board = {}
-    if res["game"][0][1]:
-        board[tuple(res["game"][0][1])] = res["game"][0][0]
-    players = res["name"]
-    nstep = len(res["game"])
+    players = [res[0][0],res[1][0],res[2][0]]
+    players2id = {res[0][0]:0,res[1][0]:1,res[2][0]:2}
+    nstep = len(res)
     print(f"Players: {players}")
     print(f"Total: {nstep} steps")
     return file_name
@@ -91,14 +90,14 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 if step != 0:
-                    if res["game"][step][1]:
-                        del board[tuple(res["game"][step][1])]
+                    if isinstance(res[step - 1][1], list):
+                        del board[tuple(res[step - 1][1])]
                     step = step - 1
             if event.key == pygame.K_RIGHT:
-                if step != len(res["game"]) - 1:
+                if step != len(res):
                     step = step + 1
-                    if res["game"][step][1]:
-                        board[tuple(res["game"][step][1])] = res["game"][step][0]
+                    if isinstance(res[step - 1][1], list):
+                        board[tuple(res[step - 1][1])] = players2id[res[step - 1][0]]
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
         Lcounter += 1
@@ -106,15 +105,15 @@ while running:
         Rcounter += 1
     if Lcounter > 10:
         if step != 0:
-            if res["game"][step][1]:
-                del board[tuple(res["game"][step][1])]
+            if isinstance(res[step - 1][1], list):
+                del board[tuple(res[step - 1][1])]
             step = step - 1
 
     if Rcounter > 10:
-        if step != len(res["game"]) - 1:
+        if step != len(res) - 1:
             step = step + 1
-            if res["game"][step][1]:
-                board[tuple(res["game"][step][1])] = res["game"][step][0]
+            if isinstance(res[step - 1][1], list):
+                board[tuple(res[step - 1][1])] = players2id[res[step - 1][0]]
     # Clear the screen
     screen.fill(BACKGROUND_COLOR)
 
@@ -139,10 +138,10 @@ while running:
 
     # Draw the longest path counters
     font = pygame.font.Font(None, 36)
-    scores = res["game"][step][2]
+    scores = res[step - 1][2]
     for idx, player in enumerate(players):
-        text = font.render(f"{player.capitalize()}: {scores[idx]}", True, (0, 0, 0))
-        screen.blit(text, (WIDTH - 300, 20 + idx * 40))
+        text = font.render(f"{player.capitalize()}: {scores[idx]}", True, colors[idx])
+        screen.blit(text, (WIDTH - 320, 20 + idx * 40))
 
     # Coordinate?
     font = pygame.font.Font(None, 16)
