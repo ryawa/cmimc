@@ -1,9 +1,10 @@
+# pylint: disable=W0105, W0613, C0116
+
 """
 Edit this file! This is the file you will submit.
 """
 
 import random
-import sys
 
 """
 NOTE: Each soldier's memory in the final runner will be separate from the others.
@@ -11,30 +12,36 @@ NOTE: Each soldier's memory in the final runner will be separate from the others
 WARNING: Do not print anything to stdout. It will break the grading script!
 """
 
-def base(ally: list, enemy: list, offset: int) -> int:
+""" 
+- castles have too many people on them
+- clumping
+- enemies swarming
+- history global
+"""
+
+
+def greedy(ally: list, enemy: list, offset: int) -> int:
     if enemy[3 + offset] < 8:
         return offset
     return random.randint(-1, 1)
-    # clumping
-    # enemies swarming
- 
-def new(ally: list, enemy: list, offset: int) -> int:
+
+
+def greedy_efficient(ally: list, enemy: list, offset: int) -> int:
     castle_neighbors = [i + offset for i in range(2, 5)]
-    castle_allies = sum([ally[i] for i in castle_neighbors])
-    castle_enemies = sum([enemy[i] for i in castle_neighbors])
-    
+    castle_allies = sum(ally[i] for i in castle_neighbors)
+
     if enemy[3 + offset] < 8:
         return offset
     if castle_allies > 8:
         return -offset
     return random.randint(-1, 1)
 
-def new_weighting4(ally, enemy, offset): # adds a weighting to the random decisons in new(). Currently highest scoring one 
+
+def greedy_weighted(ally, enemy, offset):
     castle_neighbors = [i + offset for i in range(2, 5)]
-    castle_allies = sum([ally[i] for i in castle_neighbors])
-    castle_enemies = sum([enemy[i] for i in castle_neighbors])
-    weighting = 0.4 #based off of testing, optimal weighting is 0.3 or 0.4
-    
+    castle_allies = sum(ally[i] for i in castle_neighbors)
+    weighting = 0.35
+
     if enemy[3 + offset] < 8:
         return offset
     if castle_allies > 8:
@@ -48,8 +55,8 @@ def new_weighting4(ally, enemy, offset): # adds a weighting to the random deciso
         return 1
     return -1
 
+
 def diversity(ally: list, enemy: list, offset: int) -> int:
-# different method. Basically uses if else statments to determine whether to stay or leave. Offers diversity for testing purposes
     if offset == 0:
         if enemy[3] >= ally[3]:
             return 0
@@ -61,17 +68,18 @@ def diversity(ally: list, enemy: list, offset: int) -> int:
                 if random.random() < 0.1:
                     return 1
     if offset != 0:
-        if enemy[offset+3] > ally[offset+3]:
+        if enemy[offset + 3] > ally[offset + 3]:
             return offset
         else:
-            return -offset     
+            return -offset
     return offset
 
-def new_run(ally, enemy, offset):
+
+def greedy_run(ally, enemy, offset):
     castle_neighbors = [i + offset for i in range(2, 5)]
-    castle_allies = sum([ally[i] for i in castle_neighbors])
-    castle_enemies = sum([enemy[i] for i in castle_neighbors])
-    
+    castle_allies = sum(ally[i] for i in castle_neighbors)
+    castle_enemies = sum(enemy[i] for i in castle_neighbors)
+
     if enemy[3 + offset] < 8:
         return offset
     if castle_allies > 8:
@@ -79,10 +87,13 @@ def new_run(ally, enemy, offset):
     if castle_enemies > 15:
         return -offset
     return random.randint(-1, 1)
-#test
+
+
 def random_strategy(ally: list, enemy: list, offset: int) -> int:
     return random.choice([-1, 0, 1])
-def return_offset(ally, enemy, offset):
+
+
+def simple_greedy(ally, enemy, offset):
     return offset
 
 
@@ -90,11 +101,11 @@ def get_strategies():
     """
     Returns a list of strategies to play against each other.
 
-    In the local tester, all of the strategies will be used as separate players, and the 
+    In the local tester, all of the strategies will be used as separate players, and the
     pairwise winrate will be calculated for each strategy.
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [new, new_weighting4]
+    strategies = [greedy, greedy_efficient, greedy_weighted]
 
     return strategies

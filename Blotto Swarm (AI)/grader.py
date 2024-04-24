@@ -76,7 +76,6 @@ class BlottoSwarmGrader:
         self.strategies = get_strategies()
 
     def grade(self, strategy1, strategy2):
-        print(self.num_games)
         scores = [0, 0]
         for game_num in range(1, self.num_games+1):
             if self.debug and game_num % 100 == 0:
