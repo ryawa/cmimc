@@ -40,7 +40,7 @@ def greedy_efficient(ally: list, enemy: list, offset: int) -> int:
 def greedy_weighted(ally, enemy, offset):
     castle_neighbors = [i + offset for i in range(2, 5)]
     castle_allies = sum(ally[i] for i in castle_neighbors)
-    weighting = 0.35
+    weighting = 0.4
 
     if enemy[3 + offset] < 8:
         return offset
