@@ -127,7 +127,7 @@ class BlottoSwarmGrader:
                     )
                     process.start()
                     processes.append(process)
-            print(f"INITIALIZED GAME {game_num}")
+            print(f"Initialized game {game_num}")
             for _ in range(self.NUM_DAYS):
                 for process in processes:
                     process.join()
