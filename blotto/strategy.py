@@ -95,7 +95,7 @@ def simple_greedy(ally, enemy, offset):
     return offset
 
 
-def new(ally, enemy, offset):
+def base(ally, enemy, offset):
     LEAD = 2
     LOSE = -5
     castle_lead = ally[3 + offset] - enemy[3 + offset]
@@ -111,6 +111,30 @@ def new(ally, enemy, offset):
     return offset
 
 
+def new(ally, enemy, offset):
+    max_lead = 3
+    min_loss = -5
+    castle_lead = ally[3 + offset] - enemy[3 + offset]
+    if offset == 0:
+        # # One person leaves every 5 days
+        # if random.random() < (1 / 5 * 1 / ally[3]):
+        #     # checking = True
+        #     pass
+        # # leave if there for 25 days?
+        # # leave if too many people?
+        if castle_lead >= max_lead:
+            if random.random() < (1 / ally[3]):
+                return random.randint(-1, 1)
+        if castle_lead <= min_loss:
+            return random.randint(-1, 1)
+        return 0
+    far_castle = 3 - 2 * offset
+    far_castle_lead = ally[far_castle] - enemy[far_castle]
+    if far_castle_lead < castle_lead or castle_lead >= max_lead:
+        return -offset
+    return offset
+
+
 def get_strategies():
     """
     Returns a list of strategies to play against each other.
@@ -120,6 +144,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [new, greedy_weighted]
+    strategies = [new, base]
 
     return strategies
