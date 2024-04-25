@@ -95,6 +95,22 @@ def simple_greedy(ally, enemy, offset):
     return offset
 
 
+def new(ally, enemy, offset):
+    LEAD = 2
+    LOSE = -5
+    castle_lead = ally[3 + offset] - enemy[3 + offset]
+    if offset == 0:
+        if castle_lead >= LEAD:
+            if random.random() < (1 / ally[3]):
+                return random.randint(-1, 1)
+        if castle_lead <= LOSE:
+            return random.randint(-1, 1)
+        return 0
+    if castle_lead >= LEAD:
+        return -offset
+    return offset
+
+
 def get_strategies():
     """
     Returns a list of strategies to play against each other.
@@ -104,6 +120,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [greedy_efficient, greedy_weighted]
+    strategies = [new, greedy_weighted]
 
     return strategies
