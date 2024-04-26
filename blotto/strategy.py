@@ -122,6 +122,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [new, base]
+    strategies = [base, simple_greedy]
 
     return strategies
