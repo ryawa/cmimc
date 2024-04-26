@@ -113,34 +113,6 @@ def base(ally, enemy, offset):
     return offset
 
 
-losing_streak = 0
-
-
-def new(ally, enemy, offset):
-    global losing_streak
-    max_lead = 3
-    min_loss = -5
-    castle_lead = ally[3 + offset] - enemy[3 + offset]
-    if offset == 0:
-        if castle_lead < 0:
-            losing_streak += 1
-        else:
-            losing_streak = 0
-        if losing_streak > 25:
-            return random.randint(-1, 1)
-        if castle_lead >= max_lead:
-            if random.random() < (1 / ally[3]):
-                return random.randint(-1, 1)
-        if castle_lead <= min_loss:
-            return random.randint(-1, 1)
-        return 0
-    far_castle = 3 - 2 * offset
-    far_castle_lead = ally[far_castle] - enemy[far_castle]
-    if far_castle_lead < castle_lead or castle_lead >= max_lead:
-        return -offset
-    return offset
-
-
 def get_strategies():
     """
     Returns a list of strategies to play against each other.
