@@ -12,22 +12,6 @@ NOTE: Each soldier's memory in the final runner will be separate from the others
 WARNING: Do not print anything to stdout. It will break the grading script!
 """
 
-def greedy(ally: list, enemy: list, offset: int) -> int:
-    if enemy[3 + offset] < 8:
-        return offset
-    return random.randint(-1, 1)
-
-
-def greedy_efficient(ally: list, enemy: list, offset: int) -> int:
-    castle_neighbors = [i + offset for i in range(2, 5)]
-    castle_allies = sum(ally[i] for i in castle_neighbors)
-
-    if enemy[3 + offset] < 8:
-        return offset
-    if castle_allies > 8:
-        return -offset
-    return random.randint(-1, 1)
-
 
 def greedy_weighted(ally, enemy, offset):
     castle_neighbors = [i + offset for i in range(2, 5)]
@@ -47,24 +31,6 @@ def greedy_weighted(ally, enemy, offset):
     return -1
 
 
-def diversity(ally: list, enemy: list, offset: int) -> int:
-    if offset == 0:
-        if enemy[3] >= ally[3]:
-            return 0
-        if enemy[3] < ally[3] - 1:
-            if enemy[0] - ally[0] >= enemy[6] - ally[6]:
-                if random.random() < 0.1:
-                    return -1
-            else:
-                if random.random() < 0.1:
-                    return 1
-    if offset != 0:
-        if enemy[offset + 3] > ally[offset + 3]:
-            return offset
-        return -offset
-    return offset
-
-
 def greedy_run(ally, enemy, offset):
     castle_neighbors = [i + offset for i in range(2, 5)]
     castle_allies = sum(ally[i] for i in castle_neighbors)
@@ -79,32 +45,15 @@ def greedy_run(ally, enemy, offset):
     return random.randint(-1, 1)
 
 
-def random_strategy(ally: list, enemy: list, offset: int) -> int:
-    return random.choice([-1, 0, 1])
-
-
-def simple_greedy(ally, enemy, offset):
+def offset(ally, enemy, offset):
     return offset
 
 
+# dont get baited
+# periodically leave
+# leave if losing and no one nearby
+# leave after 25 days?
 def base(ally, enemy, offset):
-    max_lead = 3
-    min_loss = -5
-    castle_lead = ally[3 + offset] - enemy[3 + offset]
-    if offset == 0:
-        if castle_lead >= max_lead:
-            if random.random() < (1 / ally[3]):
-                return random.randint(-1, 1)
-        if castle_lead <= min_loss:
-            return random.randint(-1, 1)
-        return 0
-    far_castle = 3 - 2 * offset
-    far_castle_lead = ally[far_castle] - enemy[far_castle]
-    if far_castle_lead < castle_lead or castle_lead >= max_lead:
-        return -offset
-    return offset
-
-def base2(ally, enemy, offset):
     max_lead = 3
     min_loss = -5
     castle_lead = ally[3 + offset] - enemy[3 + offset]
@@ -128,36 +77,6 @@ def base2(ally, enemy, offset):
     if far_castle_lead < castle_lead or castle_lead >= max_lead:
         return -offset
     return offset
-
-losing_streak = 0
-
-
-def new(ally, enemy, offset):
-    global losing_streak
-    max_lead = 3
-    min_loss = -5
-    castle_lead = ally[3 + offset] - enemy[3 + offset]
-    if offset == 0:
-        if castle_lead < 0:
-            losing_streak += 1
-        else:
-            losing_streak = 0
-        if losing_streak > 25:
-            return random.randint(-1, 1)
-        if castle_lead >= max_lead:
-            if random.random() < (1 / ally[3]):
-                return random.randint(-1, 1)
-        if castle_lead <= min_loss:
-            return random.randint(-1, 1)
-        return 0
-    far_castle = 3 - 2 * offset
-    far_castle_lead = ally[far_castle] - enemy[far_castle]
-    if far_castle_lead < castle_lead or castle_lead >= max_lead:
-        return -offset
-    # go for win
-    # periodically leave
-    return offset
-
 
 '''
 -when bait = false:
@@ -216,6 +135,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [base2, base]
+    strategies = [base, offset]
 
     return strategies
