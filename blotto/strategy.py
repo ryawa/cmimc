@@ -104,37 +104,51 @@ def base(ally, enemy, offset):
         return -offset
     return offset
 
+losing_streak = 0
+
+
+def new(ally, enemy, offset):
+    global losing_streak
+    max_lead = 3
+    min_loss = -5
+    castle_lead = ally[3 + offset] - enemy[3 + offset]
+    if offset == 0:
+        if castle_lead < 0:
+            losing_streak += 1
+        else:
+            losing_streak = 0
+        if losing_streak > 25:
+            return random.randint(-1, 1)
+        if castle_lead >= max_lead:
+            if random.random() < (1 / ally[3]):
+                return random.randint(-1, 1)
+        if castle_lead <= min_loss:
+            return random.randint(-1, 1)
+        return 0
+    far_castle = 3 - 2 * offset
+    far_castle_lead = ally[far_castle] - enemy[far_castle]
+    if far_castle_lead < castle_lead or castle_lead >= max_lead:
+        return -offset
+    return offset
+
 
 '''
 -when bait = false:
     do what we normally do: base()
 -when enemy has more than 6 and we are currently losing by 2? Bait =true
 '''
+
 bait = False 
-bait_direction = 0 #direction soldiers run away to
-steps_taken = 0 #num of steps taken away from castle
-steps_taken_back = 0 #num of steps going back
-going_back = False #done baiting and going back
+bait_direction = 0 # direction soldiers run away to
+steps_taken = 0 # num of steps taken away from castle
+steps_taken_back = 0 # num of steps going back
+going_back = False # done baiting and going back
 def bait_soldiers(ally, enemy, offset):
     global bait, bait_direction, steps_taken, steps_taken_back, going_back
     if offset == 0 and enemy[3] > 6 and enemy[3] - ally[3] >= 2:
         bait = True
     if bait == False:
-        max_lead = 3
-        min_loss = -5
-        castle_lead = ally[3 + offset] - enemy[3 + offset]
-        if offset == 0:
-            if castle_lead >= max_lead:
-                if random.random() < (1 / ally[3]):
-                    return random.randint(-1, 1) # we should go to castle that needs more help instead of random
-            if castle_lead <= min_loss:
-                return random.randint(-1, 1)
-            return 0
-        far_castle = 3 - 2 * offset
-        far_castle_lead = ally[far_castle] - enemy[far_castle]
-        if far_castle_lead < castle_lead or castle_lead >= max_lead:
-            return -offset
-        return offset
+        return base(ally, enemy, offset) # we should go to castle that needs more help instead of random
     else:
         # first check if done baiting
         if steps_taken_back == 3:
@@ -144,8 +158,8 @@ def bait_soldiers(ally, enemy, offset):
             steps_taken_back = 0
             going_back = False
 
-        #check which castle to go towards
-        if offset == 0 and steps_taken == 0: #if soldier is currently on the castle and hasnt taken any steps away
+        # check which castle to go towards
+        if offset == 0 and steps_taken == 0: # if soldier is currently on the castle and hasnt taken any steps away
             if enemy[0] - ally[0] > enemy[6] - ally[6]:
                 bait_direction = -1
             else:
@@ -155,7 +169,7 @@ def bait_soldiers(ally, enemy, offset):
             steps_taken +=1
             return bait_direction
         else:
-            if bait_direction == -1 and enemy[6] <3:
+            if bait_direction == -1 and enemy[6] < 3:
                 going_back = True
             if bait_direction == 1 and enemy[0] < 3:
                 going_back = True
@@ -163,9 +177,7 @@ def bait_soldiers(ally, enemy, offset):
             if going_back == True:
                 steps_taken_back += 1
                 return -bait_direction
-            return 0 #if not going back, stay
-        
-        
+            return 0 # if not going back, stay
 
 
 def get_strategies():
@@ -177,6 +189,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [base, simple_greedy, bait_soldiers]
+    strategies = [bait_soldiers, base, new, simple_greedy]
 
     return strategies
