@@ -104,6 +104,31 @@ def base(ally, enemy, offset):
         return -offset
     return offset
 
+def base2(ally, enemy, offset):
+    max_lead = 3
+    min_loss = -5
+    castle_lead = ally[3 + offset] - enemy[3 + offset]
+    if offset == 0:
+        if enemy[0] - ally[0] > enemy[6] - ally[6]:
+            losing_offset = -1
+        else:
+            losing_offset = 1
+        if castle_lead >= max_lead:
+            if random.random() < (1 / ally[3]):
+                return losing_offset
+        if castle_lead <= min_loss:
+            return losing_offset
+        return 0
+    far_castle = 3 - 2 * offset
+    far_castle_lead = ally[far_castle] - enemy[far_castle]
+    if castle_lead < 0 < castle_lead + ally[3]:
+        return offset
+    if far_castle_lead < 0 < far_castle_lead + ally[3]:
+        return -offset
+    if far_castle_lead < castle_lead or castle_lead >= max_lead:
+        return -offset
+    return offset
+
 losing_streak = 0
 
 
@@ -129,6 +154,8 @@ def new(ally, enemy, offset):
     far_castle_lead = ally[far_castle] - enemy[far_castle]
     if far_castle_lead < castle_lead or castle_lead >= max_lead:
         return -offset
+    # go for win
+    # periodically leave
     return offset
 
 
@@ -189,6 +216,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [bait_soldiers, base, new, simple_greedy]
+    strategies = [base2, base]
 
     return strategies
