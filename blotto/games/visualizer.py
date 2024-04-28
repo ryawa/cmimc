@@ -1,3 +1,4 @@
+from pathlib import Path
 import json
 import game2dboard
 
@@ -7,7 +8,7 @@ bd.grid_color = "DarkSlateBlue"
 bd.cell_color = "LightCyan"
 bd.cell_size = 65
 
-f = open("match.json")
+f = Path(__file__).with_name("match.json").open()
 j = json.load(f)
 
 game_num = 0
