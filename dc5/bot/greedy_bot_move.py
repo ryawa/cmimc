@@ -80,7 +80,7 @@ def score(board): # return current score for each player
     return scores
     
 
-def strategy(board_copy, player):
+def greedy_bot_move(board_copy, player):
     
     maxscore = 0
     select = []
