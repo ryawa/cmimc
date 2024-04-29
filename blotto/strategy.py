@@ -79,6 +79,42 @@ def base(ally, enemy, offset):
     return offset
 
 
+def new(ally, enemy, offset):
+    max_lead = 4
+    min_loss = -4
+    castle_lead = ally[3 + offset] - enemy[3 + offset]
+    if offset == 0:
+        if enemy[0] - ally[0] > enemy[6] - ally[6]:
+            losing_offset = -1
+        else:
+            losing_offset = 1
+        if castle_lead >= max_lead or castle_lead < 0:
+            if random.random() < (1 / ally[3]):
+                return losing_offset
+        if castle_lead <= min_loss:
+            return losing_offset
+        return 0
+    far_castle = 3 - 2 * offset
+    far_castle_lead = ally[far_castle] - enemy[far_castle]
+    if castle_lead <= 0 < castle_lead + ally[3]:
+        return offset
+    if far_castle_lead <= 0 < far_castle_lead + ally[3]:
+        return -offset
+    if castle_lead <= 0 and far_castle_lead <= 0:
+        if castle_lead >= far_castle_lead:
+            return offset
+        else:
+            return -offset
+    else:
+        if castle_lead <= far_castle_lead:
+            return offset
+        else:
+            return -offset
+    if far_castle_lead < castle_lead or castle_lead >= max_lead:
+        return -offset
+    return offset
+
+
 def get_strategies():
     """
     Returns a list of strategies to play against each other.
@@ -88,6 +124,6 @@ def get_strategies():
 
     In the official grader, only the first element of the list will be used as your strategy.
     """
-    strategies = [base, offset]
+    strategies = [new, base]
 
     return strategies
