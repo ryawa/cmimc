@@ -75,8 +75,9 @@ class GreedyCriminal(BaseCriminal):
         out_edges = sorted(
             out_edges,
             key=get_edge_weight,
-            reverse=True,
         )
-        k = (8 - len(out_edges) + 1) / 8 * 3 / 15
-        # ties?
-        return (out_edges[0][0], out_edges[0][1], math.floor(k * budget))
+        if len(out_edges) == 1:
+            return (out_edges[0][0], out_edges[0][1], budget)
+        else:
+            weight = get_edge_weight(out_edges[1]) - get_edge_weight(out_edges[0]) - 1
+            return (out_edges[0][0], out_edges[0][1], min(weight, budget))

@@ -130,13 +130,13 @@ if __name__ == "__main__":
         ("Greedy Criminal", GreedyCriminal),
     ]
     students = [
-        ("Dijkstra Student", DijkstraStudent),
-        ("Random Student #1", RandomStudent),
-        ("Random Student #2", RandomStudent),
-        ("Random Student #3", RandomStudent),
-        ("Random Student #4", RandomStudent),
-        ("Random Student #5", RandomStudent),
-        ("Random Student #6", RandomStudent),
+        ("Dijkstra Student", GreedyStudent),
+        ("Random Student #1", GreedyStudent),
+        ("Random Student #2", GreedyStudent),
+        ("Random Student #3", GreedyStudent),
+        ("Random Student #4", GreedyStudent),
+        ("Random Student #5", GreedyStudent),
+        ("Random Student #6", GreedyStudent),
         ("Greedy Student", GreedyStudent),
     ]
 
