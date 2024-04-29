@@ -13,12 +13,7 @@ class BaseStudent:
         :param begin: The label of the vertex which students begin on.
         :param ends: A list of labels of vertices that students may end on (i.e. count as a valid exit).
         """
-        self.edge_list = edge_list
-        self.begin = begin
-        self.ends = ends
-
-        self.graph = nx.DiGraph()
-        self.graph.add_weighted_edges_from(edge_list)
+        pass
 
     def strategy(
         self,
@@ -38,6 +33,14 @@ class BaseStudent:
 
 # Starter strategy
 class RandomStudent(BaseStudent):
+    def __init__(self, edge_list, begin, ends):
+        self.edge_list = edge_list
+        self.begin = begin
+        self.ends = ends
+
+        self.graph = nx.DiGraph()
+        self.graph.add_weighted_edges_from(edge_list)
+
     def strategy(self, edge_updates, vertex_count, current_vertex):
         # Take a random out-edge
         return random.choice(
@@ -51,6 +54,14 @@ class RandomStudent(BaseStudent):
 
 
 class DijkstraStudent(BaseStudent):
+    def __init__(self, edge_list, begin, ends):
+        self.edge_list = edge_list
+        self.begin = begin
+        self.ends = ends
+
+        self.graph = nx.DiGraph()
+        self.graph.add_weighted_edges_from(edge_list)
+
     def strategy(self, edge_updates, vertex_counts, current_vertex):
         for (u, v), w in edge_updates.items():
             self.graph[u][v]["weight"] += w
@@ -66,6 +77,14 @@ class DijkstraStudent(BaseStudent):
 
 
 class GreedyStudent(BaseStudent):
+    def __init__(self, edge_list, begin, ends):
+        self.edge_list = edge_list
+        self.begin = begin
+        self.ends = ends
+
+        self.graph = nx.DiGraph()
+        self.graph.add_weighted_edges_from(edge_list)
+
     def strategy(self, edge_updates, vertex_counts, current_vertex):
         for (u, v), w in edge_updates.items():
             self.graph[u][v]["weight"] += w
@@ -74,5 +93,6 @@ class GreedyStudent(BaseStudent):
         for edge in out_edges:
             get_edge_weight = lambda edge: self.graph.get_edge_data(*edge)["weight"]
             if get_edge_weight(edge) < get_edge_weight(min_edge):
+                # ties?
                 min_edge = edge
         return min_edge[1]

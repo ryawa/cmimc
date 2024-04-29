@@ -1,5 +1,6 @@
 import networkx as nx
 import random
+import math
 
 
 class BaseCriminal:
@@ -53,16 +54,29 @@ class RandomCriminal(BaseCriminal):
             ),
             random.randint(0, budget),
         )
-    
-# implements dijkstra to spend money on shortest paths.
-# probably should add stuff like don't spend money if not many students on a vertex
-class Criminal_Dijkstra(BaseCriminal):
-    def __init__(self, edge_list: list[tuple[int, int, int]], begin: int, ends: list[int]) -> None:
+
+
+class GreedyCriminal(BaseCriminal):
+    def __init__(self, edge_list, begin, ends):
         self.edge_list = edge_list
         self.begin = begin
         self.ends = ends
 
         self.graph = nx.DiGraph()
         self.graph.add_weighted_edges_from(edge_list)
-    def strategy():
-        pass
+
+    def strategy(self, edge_updates, vertex_count, budget):
+        for (u, v), w in edge_updates.items():
+            self.graph[u][v]["weight"] += w
+        max_vertex = max(vertex_count, key=vertex_count.get)
+        out_edges = list(self.graph.out_edges(nbunch=max_vertex))
+        # ties?
+        get_edge_weight = lambda edge: self.graph.get_edge_data(*edge)["weight"]
+        out_edges = sorted(
+            out_edges,
+            key=get_edge_weight,
+            reverse=True,
+        )
+        k = (8 - len(out_edges) + 1) / 8 * 3 / 15
+        # ties?
+        return (out_edges[0][0], out_edges[0][1], math.floor(k * budget))

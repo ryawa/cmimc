@@ -2,7 +2,7 @@ import json
 import random
 import networkx as nx
 from graph import generate_graph, edge_list_to_nx
-from criminal import BaseCriminal, RandomCriminal
+from criminal import BaseCriminal, RandomCriminal, GreedyCriminal
 from student import BaseStudent, RandomStudent, DijkstraStudent, GreedyStudent
 
 jsonify = lambda d: {str(k): v for k, v in d.items() if v}
@@ -93,6 +93,7 @@ def play(
 
             # Check that edge exists, o.w. take random out-edge
             if (student_pos[i], v) not in edge_updates:
+                print("HHHHHHHHHH")
                 v = random.choice(
                     [
                         x
@@ -126,7 +127,7 @@ if __name__ == "__main__":
 
     criminals = [
         ("Random Criminal #1", RandomCriminal),
-        ("Random Criminal #2", RandomCriminal),
+        ("Greedy Criminal", GreedyCriminal),
     ]
     students = [
         ("Dijkstra Student", DijkstraStudent),
