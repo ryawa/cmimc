@@ -53,29 +53,6 @@ class RandomStudent(BaseStudent):
         )
 
 
-class DijkstraStudent(BaseStudent):
-    def __init__(self, edge_list, begin, ends):
-        self.edge_list = edge_list
-        self.begin = begin
-        self.ends = ends
-
-        self.graph = nx.DiGraph()
-        self.graph.add_weighted_edges_from(edge_list)
-
-    def strategy(self, edge_updates, vertex_counts, current_vertex):
-        for (u, v), w in edge_updates.items():
-            self.graph[u][v]["weight"] += w
-        shortest_paths = nx.single_source_dijkstra_path_length(
-            self.graph, source=current_vertex
-        )
-        exit_paths = {
-            vertex: shortest_paths[vertex]
-            for vertex in self.ends
-            if vertex in shortest_paths
-        }
-        return min(exit_paths, key=exit_paths.get)
-
-
 class GreedyStudent(BaseStudent):
     def __init__(self, edge_list, begin, ends):
         self.edge_list = edge_list
@@ -88,11 +65,11 @@ class GreedyStudent(BaseStudent):
     def strategy(self, edge_updates, vertex_counts, current_vertex):
         for (u, v), w in edge_updates.items():
             self.graph[u][v]["weight"] += w
+        # Avoid other students, ties?
         out_edges = list(self.graph.out_edges(nbunch=current_vertex))
-        min_edge = out_edges[0]
-        for edge in out_edges:
-            get_edge_weight = lambda edge: self.graph.get_edge_data(*edge)["weight"]
-            if get_edge_weight(edge) < get_edge_weight(min_edge):
-                # ties?
-                min_edge = edge
-        return min_edge[1]
+        get_edge_weight = lambda edge: self.graph.get_edge_data(*edge)["weight"]
+        out_edges = sorted(
+            out_edges,
+            key=get_edge_weight,
+        )
+        return out_edges[0][1]

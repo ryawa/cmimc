@@ -70,7 +70,6 @@ class GreedyCriminal(BaseCriminal):
             self.graph[u][v]["weight"] += w
         max_vertex = max(vertex_count, key=vertex_count.get)
         out_edges = list(self.graph.out_edges(nbunch=max_vertex))
-        # ties?
         get_edge_weight = lambda edge: self.graph.get_edge_data(*edge)["weight"]
         out_edges = sorted(
             out_edges,
@@ -80,4 +79,5 @@ class GreedyCriminal(BaseCriminal):
             return (out_edges[0][0], out_edges[0][1], budget)
         else:
             weight = get_edge_weight(out_edges[1]) - get_edge_weight(out_edges[0]) - 1
+            weight = max(weight, 1)
             return (out_edges[0][0], out_edges[0][1], min(weight, budget))
